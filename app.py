@@ -1,9 +1,11 @@
-from flask import Flask, render_template, request, redirect, make_response
+from flask import Flask, render_template, request, redirect, make_response, url_for
 import sounddevice as sd
 import numpy as np
 #from tensorflow import keras
 import scipy as sp
 import scipy.signal
+import requests
+import time
 
 app = Flask(__name__)
 
@@ -16,26 +18,31 @@ start_duration = 0.5
 i = 0
 
 @app.route('/')
-def index(time=0):
-    return render_template('main.html', time=time*100)
+def index(time=''):
+    return render_template('main.html', time=stream.time-start_time)
 
 @app.route('/request')
 def req():
-    global i
-    i += 1
-    return index(time=i)
+    return redirect('/')
 
 @app.route('/stop')
 def stop():
     stream.stop()
     return redirect('/')
 
-def callback(indata, outdata, frames, time, status):
-    redirect('/request')
-    outdata[:] = indata
+@app.route('/start')
+def start():
+    stream.start()
+    return redirect('/')
 
+def callback(indata, outdata, frames, time, status):
+    outdata[:] = indata
+    # params = dict(time=i)
+    # resp = requests.post('http://localhost:5000', params=params)
+    # redirect(resp.url)
+    
 block = int(sd.default.samplerate * rec_duration)
 stream = sd.Stream(blocksize=block, callback=callback)
-stream.start()
+start_time = stream.time
 
 
