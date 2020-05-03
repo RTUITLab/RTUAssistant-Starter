@@ -1,4 +1,4 @@
-<h1>RTUAssistantName</h1>
+<h1>RTUAssistant[Name]</h1>
 <h2>Установка зависимостей</h2>
 pip install -r requirements/common.txt
 <h2>Запуск</h2>
