@@ -18,12 +18,12 @@ start_duration = 0.5
 i = 0
 
 @app.route('/')
-def index(time=''):
+def index():
     return render_template('main.html', time=stream.time-start_time)
 
 @app.route('/request')
 def req():
-    return redirect('/')
+    return render_template('main.html', time=stream.time-start_time)
 
 @app.route('/stop')
 def stop():
@@ -37,6 +37,10 @@ def start():
 
 def callback(indata, outdata, frames, time, status):
     outdata[:] = indata
+    
+    global i
+    if i == 3:
+        redirect('/request')
     # params = dict(time=i)
     # resp = requests.post('http://localhost:5000', params=params)
     # redirect(resp.url)
@@ -44,5 +48,3 @@ def callback(indata, outdata, frames, time, status):
 block = int(sd.default.samplerate * rec_duration)
 stream = sd.Stream(blocksize=block, callback=callback)
 start_time = stream.time
-
-
