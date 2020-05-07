@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript">
+      function req() {
+        $.ajax({
+          type: 'GET',
+          url: '/req',
+          success: function(data) {
+            document.querySelector('#name').innerHTML = data.name;
+            //document.querySelector('#latency').innerHTML = data.latency;
+          }
+        }); 
+      }
+
+      function stop() {
+        clearInterval(timerID);
+      }
+
+      timerID = setInterval(
+        req,
+        300
+      ) 
+    </script>
+
+    <title>RTU Assistant Name</title>
+  </head>
+  <body class="container">
+
+    <h1 id="name"></h1>
+    <!-- <h1 id="latency"></h1> -->
+
+    <button type="button" class="btn btn-dark" onclick="stop()"> Stop</button>
+
+  </body>
+</html>
