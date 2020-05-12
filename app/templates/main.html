@@ -13,31 +13,61 @@
         $.ajax({
           type: 'GET',
           url: '/req',
+          timeout: 100,
           success: function(data) {
+            document.querySelector('#time').innerHTML = data.time + "s";
             document.querySelector('#name').innerHTML = data.name;
-            //document.querySelector('#latency').innerHTML = data.latency;
+            document.querySelector('#count').innerHTML = "Количество: " + data.count;
+            document.querySelector('#prediction').innerHTML = data.prediction + '%';
+          },
+          error: function(textStatus) {
           }
         }); 
       }
 
       function stop() {
-        clearInterval(timerID);
+        $.ajax({
+          type: 'POST',
+          url: '/stop',
+        });
+        
+      }
+
+      function start() {
+        $.ajax({
+          type: 'POST',
+          url: '/start'
+        });
       }
 
       timerID = setInterval(
         req,
-        300
-      ) 
+        100
+      );
     </script>
 
     <title>RTU Assistant Name</title>
   </head>
-  <body class="container">
+  <body class="container  text-center">
 
-    <h1 id="name"></h1>
-    <!-- <h1 id="latency"></h1> -->
+    <div>
+      <h1 id="name">None</h1>
+      <h2 id="time">0s</h2>
+    </div>
 
-    <button type="button" class="btn btn-dark" onclick="stop()"> Stop</button>
+    <div>
+      <h2 id="count">Количество: 0</h2>
+    </div>
 
+    <div>
+      <h2 id="prediction">0%</h2>
+    </div>
+        
+    <div>
+      <button type="button" class="btn btn-primary btn-lg" onclick="start()"> Start</button>
+      <button type="button" class="btn btn-secondary btn-lg" onclick="stop()"> Stop</button>
+    </div>
+    
+    
   </body>
 </html>

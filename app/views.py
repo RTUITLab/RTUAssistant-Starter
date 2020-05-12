@@ -1,8 +1,9 @@
 from app import app
 import app as APP
 from flask import render_template, request, redirect, make_response, url_for, jsonify
+import requests
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     return render_template('main.html')
 
@@ -11,17 +12,17 @@ def req():
     return jsonify({
         'time': str(int(APP.stream.time-APP.start_time)),
         'name': APP.name,
-        'latency': APP.stream.latency
+        'count': APP.count,
+        'prediction': int(APP.prediction * 100)
     })
 
-@app.route('/stop')
+@app.route('/stop', methods=['POST'])
 def stop():
     APP.stream.stop()
-    return redirect('/')
+    APP.count = 0
+    return jsonify({'success' : 1})
 
-@app.route('/start')
+@app.route('/start', methods=['POST'])
 def start():
     APP.stream.start()
-    return redirect('/')
-
-
+    return jsonify({'success' : 1})
