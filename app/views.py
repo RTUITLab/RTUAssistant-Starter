@@ -1,7 +1,7 @@
 from app import app
 import app as APP
-from flask import render_template, request, redirect, make_response, url_for, jsonify
-import requests
+from flask import render_template, jsonify
+
 
 @app.route('/', methods=['GET'])
 def index():

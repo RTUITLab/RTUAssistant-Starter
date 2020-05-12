@@ -7,7 +7,6 @@ import numpy as np
 import tensorflow as tf
 import scipy as sp
 import scipy.signal
-import requests
 import time
 
 from app import views
