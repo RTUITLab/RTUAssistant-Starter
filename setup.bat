@@ -1,9 +1,13 @@
 @echo off
 
-set VIRTUAL_ENV=test_venv
+python -m venv env
 
-call test_venv\Scripts\activate.bat
+call env\Scripts\activate.bat
 
-where python
+python -m pip install --upgrade pip
 
-pip list
+pip install -r requirements.txt
+
+call env\Scripts\deactivate.bat
+
+echo Successful install!
