@@ -43,7 +43,7 @@ rec_duration = 0.1
 count = 0
 prediction = 0
 
-model = tf.keras.models.load_model('AudRec_L2_v2.4(12_units).h5')
+model = tf.keras.models.load_model('app\AudRec_L2_v2.4(12_units).h5')
 
 names = {
     0 : 'None',
