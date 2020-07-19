@@ -43,7 +43,7 @@ rec_duration = 0.1
 count = 0
 prediction = 0
 
-model = tf.keras.models.load_model('app\AudRec_L2_v2.4(12_units).h5')
+model = tf.keras.models.load_model('app\Mira-v1.0.h5')
 
 names = {
     0 : 'None',
@@ -55,10 +55,12 @@ data = sd.rec(int(4 * rec_duration * sd.default.samplerate), blocking=True)
 name = 'None'
 
 def callback(indata, outdata, frames, time, status):
-    outdata[:] = indata
+    #outdata[:] = indata
     global name, model, data, count, prediction
     prediction = model.predict(func(data))[0][1]
     class_id = int(prediction > 0.9)
+    if class_id:
+        outdata[:] = data
     count += class_id
     name = names[class_id]
     data = data[frames:]
