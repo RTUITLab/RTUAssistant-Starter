@@ -43,11 +43,13 @@ rec_duration = 0.1
 count = 0
 prediction = 0
 
-model = tf.keras.models.load_model('app\Lada-v1.0.h5')
+model_name = 'Mira'
+
+model = tf.keras.models.load_model('app\{}.h5'.format(model_name))
 
 names = {
     0 : 'None',
-    1 : 'Джарвис',
+    1 : model_name,
 }
 
 data = sd.rec(int(4 * rec_duration * sd.default.samplerate), blocking=True)
