@@ -2,4 +2,4 @@
 
 call env\Scripts\activate.bat
 
-run.py
+python run.py
