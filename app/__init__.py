@@ -47,9 +47,7 @@ prediction = 0
 k = 0
 tmp_count = 0
 
-model_name = 'Mira GRU-v1.0'
-
-model = tf.keras.models.load_model(r"app/Mira_GRU-v1.0.h5", compile=False)
+model = tf.keras.models.load_model(r"app\Mira_GRU-v1.0.h5", compile=False)
 
 names = {
     0 : 'None',
@@ -65,7 +63,6 @@ def callback(indata, outdata, frames, time, status):
     global name, model, data, count, prediction, k, tmp_count
     
     k += 1
-    print(k)
     data = data[frames:]
     data = np.append(data, indata, axis=0)
     prediction = model(func(data))[0][1]
