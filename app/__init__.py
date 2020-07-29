@@ -54,7 +54,7 @@ names = {
     1 : 'Mira',
 }
 
-data = sd.rec(int(4 * 0.1 * sd.default.samplerate), blocking=True)
+data = sd.rec(int(4 * 0.1 * sd.default.samplerate), blocking=False)
 
 name = 'None'
 
