@@ -1,12 +1,18 @@
 import tensorflow as tf
 import numpy as np
 import scipy as sp
+import scipy.signal
 
 
 class Predictor():
     def __init__(self, path_to_model):
-        self.model = tf.keras.models.load_model(path_to_model)
-        self.class_id = None
+        with tf.device('CPU:0'):
+            self.model = tf.keras.models.load_model(path_to_model)
+            self.model.compile(
+                optimizer=self.model.optimizer,
+                loss=self.model.loss,
+            )
+        self.class_id = 0
         
     def norm(self, x):
         std = np.std(x ,ddof=1)
@@ -32,5 +38,5 @@ class Predictor():
         return np.reshape(self.norm(e_parts), (1, 1, 20))
 
     def predict(self, data, limit=0.5):
-        prediction = self.model(self.func(data))[0][1]
+        prediction = self.model(self.func(data))[0][0]
         self.class_id = int(prediction > limit)
