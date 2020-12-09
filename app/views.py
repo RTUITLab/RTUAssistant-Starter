@@ -19,7 +19,6 @@ def req():
 @app.route('/stop', methods=['POST'])
 def stop():
     RECORDER.STREAM.stop()
-    #APP.count = 0
     return jsonify({'success' : 1})
 
 @app.route('/start', methods=['POST'])

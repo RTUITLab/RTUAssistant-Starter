@@ -30,6 +30,7 @@ class Recorder():
         self.data = sd.rec(int(1.0 * sd.default.samplerate), blocking=False)
         block = int(sd.default.samplerate * self.REC_DURATION)
         self.STREAM = sd.Stream(blocksize=block, callback=self.callback)
+        self.STREAM.start()
         self.START_TIME = self.STREAM.time
 
 
