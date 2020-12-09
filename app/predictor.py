@@ -17,7 +17,7 @@ class Predictor():
         
     def predictions(self, data):
         predictions = []
-        for parts in range(0, 16000, 4000):
+        for parts in range(4000, 8001, 4000):
             e_parts = self.get_energy(data[parts:])
             with tf.device('CPU:0'):
                 predictions.append(self.model(e_parts)[0][0].numpy())

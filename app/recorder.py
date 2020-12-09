@@ -9,7 +9,7 @@ sd.default.channels = 1
 
 class Recorder():
     def __init__(self, path):
-        self.REC_DURATION = 1.0
+        self.REC_DURATION = 0.5
         self.STREAM = None
         self.START_TIME = None
         self.PREDICTOR = Predictor(path)
@@ -22,15 +22,13 @@ class Recorder():
         self.data = np.append(self.data, indata, axis=0)
         self.PREDICTOR.predict(self.data)
         self.COUNT += self.PREDICTOR.class_id
-        if self.PREDICTOR.class_id == 1:
-            sd.play(self.data)
         self.PREDICTOR.class_id = 0
 
     def listen(self):
         self.data = sd.rec(int(1.0 * sd.default.samplerate), blocking=False)
         block = int(sd.default.samplerate * self.REC_DURATION)
         self.STREAM = sd.Stream(blocksize=block, callback=self.callback)
-        self.STREAM.start()
+        # self.STREAM.start()
         self.START_TIME = self.STREAM.time
 
 

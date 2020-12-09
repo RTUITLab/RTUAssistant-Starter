@@ -11,7 +11,7 @@ def index():
 def req():
     return jsonify({
         'time': str(int(RECORDER.STREAM.time-RECORDER.START_TIME)),
-        'name': RECORDER.PREDICTOR.class_id,
+        'name': "Mira" if RECORDER.PREDICTOR.class_id else 'None',
         'count': RECORDER.COUNT,
         'prediction': str(RECORDER.PREDICTOR.prediction),
     })
