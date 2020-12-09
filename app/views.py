@@ -1,5 +1,5 @@
 from app import app
-import app as APP
+from app import RECORDER
 from flask import render_template, jsonify
 
 
@@ -10,19 +10,19 @@ def index():
 @app.route('/req', methods=['GET'])
 def req():
     return jsonify({
-        'time': str(int(APP.stream.time-APP.start_time)),
-        'name': APP.name,
-        'count': APP.count,
-        'prediction': int(APP.prediction * 100)
+        'time': str(int(RECORDER.STREAM.time-RECORDER.START_TIME)),
+        'name': RECORDER.PREDICTOR.class_id,
+        'count': RECORDER.COUNT,
+        'prediction': str(RECORDER.PREDICTOR.prediction),
     })
 
 @app.route('/stop', methods=['POST'])
 def stop():
-    APP.stream.stop()
-    APP.count = 0
+    RECORDER.STREAM.stop()
+    #APP.count = 0
     return jsonify({'success' : 1})
 
 @app.route('/start', methods=['POST'])
 def start():
-    APP.stream.start()
+    RECORDER.STREAM.start()
     return jsonify({'success' : 1})
