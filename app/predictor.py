@@ -13,30 +13,36 @@ class Predictor():
                 loss=self.model.loss,
             )
         self.class_id = 0
+        self.prediction = 0
         
-    def norm(self, x):
-        std = np.std(x ,ddof=1)
-        return (x - np.mean(x)) / std
+    def predictions(self, data):
+        predictions = []
+        for parts in range(0, 16000, 4000):
+            e_parts = self.get_energy(data[parts:])
+            with tf.device('CPU:0'):
+                predictions.append(self.model(e_parts)[0][0].numpy())
+        return predictions
 
-    def func(self, _x, _sr=44100):
-        _x = np.reshape(_x, len(_x))
-        _x = tf.keras.preprocessing.sequence.pad_sequences(
-            [_x],
-            maxlen=int(_sr * 1.0),
+    def get_energy(self, data, sr=16000):
+        x = tf.keras.preprocessing.sequence.pad_sequences(
+            [data],
+            maxlen=int(16000 * 1.0),
             padding='post',
             truncating='post',
             dtype='float32'
         )[0]
-        coeff = sp.signal.firwin(999, [260, 700], fs=_sr, pass_zero=False)
-        x_filtered = sp.signal.lfilter(coeff, 1.0, _x)
-        x_normalized = x_filtered/x_filtered.max()
+        x = tf.reshape(x, (sr))
+        coeff = sp.signal.firwin(999, [260, 700], fs=sr, pass_zero=False)
+        x_filtered = sp.signal.lfilter(coeff, 1.0, x)
+        x_normalized = x_filtered / x_filtered.max()
         x_squared = np.square(x_normalized)
-        splited = np.array_split(x_squared, 20)
+        splited = np.array_split(x_squared, 200)
         e_parts = np.empty((0))
         for part in splited:
             e_parts = np.append(e_parts, sp.integrate.simps(part))
-        return np.reshape(self.norm(e_parts), (1, 1, 20))
+        return np.reshape(e_parts, (1, 200))
 
     def predict(self, data, limit=0.5):
-        prediction = self.model(self.func(data))[0][0]
-        self.class_id = int(prediction > limit)
+        preds = self.predictions(data)
+        self.prediction = tf.math.reduce_mean(preds).numpy()
+        self.class_id = int(self.prediction > limit)

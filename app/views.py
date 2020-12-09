@@ -10,11 +10,10 @@ def index():
 @app.route('/req', methods=['GET'])
 def req():
     return jsonify({
-        
         'time': str(int(RECORDER.STREAM.time-RECORDER.START_TIME)),
         'name': RECORDER.PREDICTOR.class_id,
         'count': RECORDER.COUNT,
-        'prediction': 'None',
+        'prediction': str(RECORDER.PREDICTOR.prediction),
     })
 
 @app.route('/stop', methods=['POST'])

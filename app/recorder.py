@@ -3,13 +3,13 @@ import numpy as np
 from .predictor import Predictor
 
 
-sd.default.samplerate = 44100
+sd.default.samplerate = 16000
 sd.default.channels = 1
 
 
 class Recorder():
     def __init__(self, path):
-        self.REC_DURATION = 0.1
+        self.REC_DURATION = 1.0
         self.STREAM = None
         self.START_TIME = None
         self.PREDICTOR = Predictor(path)
@@ -20,7 +20,7 @@ class Recorder():
         #outdata[:] = indata
         self.data = self.data[frames:]
         self.data = np.append(self.data, indata, axis=0)
-        self.PREDICTOR.predict(self.data, 0.99)
+        self.PREDICTOR.predict(self.data)
         self.COUNT += self.PREDICTOR.class_id
         if self.PREDICTOR.class_id == 1:
             sd.play(self.data)
